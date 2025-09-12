@@ -34,8 +34,8 @@ export default function Navbar() {
             <div className="ml-10 flex items-baseline space-x-8">
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href}>
-                  <a
-                    className={`font-sans font-medium transition-colors duration-200 ${
+                  <span
+                    className={`font-sans font-medium transition-colors duration-200 cursor-pointer ${
                       location === item.href
                         ? "text-primary"
                         : "text-muted-foreground hover:text-primary"
@@ -43,7 +43,7 @@ export default function Navbar() {
                     data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                   >
                     {item.label}
-                  </a>
+                  </span>
                 </Link>
               ))}
             </div>
@@ -81,8 +81,8 @@ export default function Navbar() {
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navItems.map((item) => (
               <Link key={item.href} href={item.href}>
-                <a
-                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
+                <span
+                  className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 cursor-pointer ${
                     location === item.href
                       ? "text-primary bg-primary/10"
                       : "text-muted-foreground hover:text-primary hover:bg-muted"
@@ -91,7 +91,7 @@ export default function Navbar() {
                   data-testid={`mobile-nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
                 >
                   {item.label}
-                </a>
+                </span>
               </Link>
             ))}
             <Link href="/contact">
