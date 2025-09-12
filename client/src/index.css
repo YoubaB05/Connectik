@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(240, 5%, 96%);
+  --foreground: hsl(222, 14%, 17%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(222, 14%, 17%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(222, 14%, 17%);
+  --primary: hsl(218, 70%, 35%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(32, 30%, 55%);
+  --secondary-foreground: hsl(222, 14%, 17%);
+  --muted: hsl(210, 40%, 94%);
+  --muted-foreground: hsl(215, 16%, 47%);
+  --accent: hsl(158, 64%, 40%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(214, 32%, 91%);
+  --input: hsl(214, 32%, 91%);
+  --ring: hsl(218, 70%, 35%);
+  --radius: 0.75rem;
+  
+  /* Custom luxury colors */
+  --anthracite: hsl(222, 14%, 17%);
+  --off-white: hsl(240, 5%, 96%);
+  --taupe: hsl(32, 15%, 65%);
+  --deep-blue: hsl(218, 70%, 35%);
+  --emerald: hsl(158, 64%, 40%);
+  --bronze: hsl(32, 30%, 55%);
+  
+  /* Typography */
+  --font-sans: 'Montserrat', sans-serif;
+  --font-serif: 'Crimson Text', serif;
+}
+
+.dark {
+  --background: hsl(222, 14%, 17%);
+  --foreground: hsl(210, 40%, 98%);
+  --card: hsl(222, 14%, 17%);
+  --card-foreground: hsl(210, 40%, 98%);
+  --popover: hsl(222, 14%, 17%);
+  --popover-foreground: hsl(210, 40%, 98%);
+  --primary: hsl(218, 70%, 35%);
+  --primary-foreground: hsl(210, 40%, 98%);
+  --secondary: hsl(32, 30%, 55%);
+  --secondary-foreground: hsl(210, 40%, 98%);
+  --muted: hsl(215, 16%, 25%);
+  --muted-foreground: hsl(215, 16%, 65%);
+  --accent: hsl(158, 64%, 40%);
+  --accent-foreground: hsl(210, 40%, 98%);
+  --destructive: hsl(0, 84%, 60%);
+  --destructive-foreground: hsl(210, 40%, 98%);
+  --border: hsl(215, 16%, 25%);
+  --input: hsl(215, 16%, 25%);
+  --ring: hsl(218, 70%, 35%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-serif antialiased bg-background text-foreground;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans;
+  }
+}
+
+@layer components {
+  .hero-gradient {
+    background: linear-gradient(135deg, hsl(222, 14%, 17%) 0%, hsl(215, 16%, 25%) 100%);
+  }
+  
+  .service-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .service-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  }
+  
+  .floating-label {
+    transition: all 0.2s ease-out;
+  }
+  
+  .form-input:focus + .floating-label,
+  .form-input:not(:placeholder-shown) + .floating-label {
+    transform: translateY(-28px) scale(0.875);
+    color: hsl(218, 70%, 35%);
+  }
+}
+
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
