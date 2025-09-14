@@ -40,23 +40,28 @@ function ProductCard({ product }: { product: Product }) {
       >
         <div className="aspect-square overflow-hidden bg-muted/50">
           {product.images && product.images.length > 0 ? (
-            <div className="w-full h-full bg-muted/30 flex items-center justify-center relative">
-              <ShoppingBag className="w-16 h-16 text-muted-foreground/50" />
-              {/* Placeholder for actual product images */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-20 h-20 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
-                    <ShoppingBag className="w-8 h-8 text-primary" />
-                  </div>
-                  <p className="text-xs text-muted-foreground font-serif">Image produit</p>
-                </div>
+            <img
+              src={product.images[0]}
+              alt={product.name}
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+              data-testid={`img-product-${product.id}`}
+              onError={(e) => {
+                // Fallback if image fails to load
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+                target.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+          ) : null}
+          {/* Fallback placeholder that shows when image fails or no image */}
+          <div className={`w-full h-full bg-muted/30 flex items-center justify-center ${product.images && product.images.length > 0 ? 'hidden' : ''}`}>
+            <div className="text-center">
+              <div className="w-20 h-20 mx-auto mb-3 bg-primary/10 rounded-full flex items-center justify-center">
+                <ShoppingBag className="w-8 h-8 text-primary" />
               </div>
+              <p className="text-xs text-muted-foreground font-serif">Image produit</p>
             </div>
-          ) : (
-            <div className="w-full h-full bg-muted/30 flex items-center justify-center">
-              <ShoppingBag className="w-16 h-16 text-muted-foreground/50" />
-            </div>
-          )}
+          </div>
           
           {product.featured && (
             <Badge className="absolute top-3 left-3 bg-accent text-accent-foreground text-xs">
@@ -193,7 +198,10 @@ export default function Boutique() {
     ? products.filter(product => product.categoryId === selectedCategory)
     : products;
 
-  const featuredProducts = products.filter(product => product.featured);
+  // Also filter featured products when a category is selected
+  const featuredProducts = selectedCategory
+    ? products.filter(product => product.featured && product.categoryId === selectedCategory)
+    : products.filter(product => product.featured);
 
   return (
     <div className="min-h-screen bg-background">
