@@ -33,8 +33,8 @@ export default function Navbar() {
           </div>
           
           {/* Desktop Navigation - hidden on smaller screens */}
-          <div className="hidden lg:block flex-1">
-            <div className="ml-10 flex items-baseline space-x-8">
+          <div className="hidden lg:flex flex-1 justify-center">
+            <div className="flex items-baseline space-x-8">
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href}>
                   <span
