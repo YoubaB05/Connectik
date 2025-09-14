@@ -1,5 +1,6 @@
 import { Link } from "wouter";
 import { Twitter, Linkedin, Instagram } from "lucide-react";
+import Logo from "@/components/ui/logo";
 
 export default function Footer() {
   return (
@@ -8,7 +9,7 @@ export default function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           <div className="md:col-span-2">
             <h3 className="text-2xl font-sans font-bold mb-4" data-testid="footer-title">
-              Excellence Digitale
+              <Logo className="h-10 w-auto" />
             </h3>
             <p className="text-white/80 mb-6 leading-relaxed" data-testid="footer-description">
               Votre partenaire de confiance pour une transformation digitale réussie. Nous combinons expertise technique, stratégie commerciale et innovation pour propulser votre entreprise vers l'excellence.
@@ -60,7 +61,7 @@ export default function Footer() {
         
         <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-white/60 text-sm mb-4 md:mb-0" data-testid="footer-copyright">
-            © 2024 Excellence Digitale. Tous droits réservés.
+            © 2025 Connectik. Tous droits réservés.
           </p>
           <div className="flex space-x-6 text-sm">
             <a href="#" className="text-white/60 hover:text-white transition-colors duration-200" data-testid="footer-legal">Mentions Légales</a>

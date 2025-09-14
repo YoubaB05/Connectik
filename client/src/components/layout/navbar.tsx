@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Logo from "@/components/ui/logo";
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -26,7 +27,7 @@ export default function Navbar() {
           <div className="flex-shrink-0">
             <Link href="/">
               <h1 className="text-xl font-sans font-bold text-primary cursor-pointer" data-testid="logo">
-                Excellence Digitale
+                 <Logo className="h-10 w-auto" />
               </h1>
             </Link>
           </div>
