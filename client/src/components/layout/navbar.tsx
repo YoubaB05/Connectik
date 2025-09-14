@@ -32,7 +32,8 @@ export default function Navbar() {
             </Link>
           </div>
           
-          <div className="hidden md:block">
+          {/* Desktop Navigation - hidden on smaller screens */}
+          <div className="hidden lg:block flex-1">
             <div className="ml-10 flex items-baseline space-x-8">
               {navItems.map((item) => (
                 <Link key={item.href} href={item.href}>
@@ -50,14 +51,47 @@ export default function Navbar() {
               ))}
             </div>
           </div>
+
+          {/* Medium Screen Navigation - compressed layout */}
+          <div className="hidden md:flex lg:hidden flex-1 items-center justify-center">
+            <div className="flex items-baseline space-x-4">
+              {navItems.map((item) => (
+                <Link key={item.href} href={item.href}>
+                  <span
+                    className={`font-sans font-medium text-sm transition-colors duration-200 cursor-pointer ${
+                      location === item.href
+                        ? "text-primary"
+                        : "text-muted-foreground hover:text-primary"
+                    }`}
+                    data-testid={`nav-${item.label.toLowerCase().replace(/\s+/g, '-')}`}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
           
-          <div className="hidden md:block">
+          {/* Desktop Consultation Button */}
+          <div className="hidden lg:block flex-shrink-0">
             <Link href="/contact">
               <Button 
                 className="bg-primary text-primary-foreground px-6 py-2 rounded-lg font-sans font-medium hover:bg-primary/90 transition-colors duration-200"
                 data-testid="button-consultation"
               >
                 Consultation Gratuite
+              </Button>
+            </Link>
+          </div>
+
+          {/* Medium Screen Consultation Button - smaller */}
+          <div className="hidden md:block lg:hidden flex-shrink-0">
+            <Link href="/contact">
+              <Button 
+                className="bg-primary text-primary-foreground px-3 py-1.5 rounded-lg font-sans font-medium hover:bg-primary/90 transition-colors duration-200 text-sm"
+                data-testid="button-consultation"
+              >
+                Consultation
               </Button>
             </Link>
           </div>
