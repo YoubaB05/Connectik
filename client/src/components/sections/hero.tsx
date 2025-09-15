@@ -50,7 +50,7 @@ export default function Hero() {
               <Link href="/contact">
                 <Button
                   variant="outline"
-                  className="border-2 border-white text-white px-8 py-4 rounded-lg font-sans font-medium text-lg hover:bg-white hover:text-foreground transition-all duration-200"
+                  className="border-2 border-[#C5A974] bg-[#C5A974] text-white px-8 py-4 rounded-lg font-sans font-medium text-lg hover:bg-[#B39861] hover:border-[#B39861] transition-all duration-200"
                   data-testid="button-start-project"
                 >
                   Commencer votre Projet
