@@ -1,6 +1,6 @@
 import { Pool, neonConfig } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+import ws from 'ws';
 import * as schema from "@shared/schema";
 import * as dotenv from 'dotenv';
 
@@ -15,5 +15,11 @@ if (!process.env.DATABASE_URL) {
   );
 }
 
-export const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+// Add SSL configuration for production
+const connectionString = process.env.DATABASE_URL;
+const pool = new Pool({ 
+  connectionString,
+  ssl: process.env.NODE_ENV === 'production' ? true : false 
+});
+
 export const db = drizzle({ client: pool, schema });
