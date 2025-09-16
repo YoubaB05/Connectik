@@ -4,13 +4,25 @@ import session from "express-session";
 import MemoryStore from "memorystore";
 import { registerRoutes } from "./routes";
 import { setupVite } from "./vite";
-import { serveStatic } from "./storage";
+import { serveStatic } from "./serveStatic";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const MemoryStoreSession = MemoryStore(session);
 
-app.use(cors());
+// Add console.log wrapper for consistent logging
+const log = (message: string) => {
+  console.log(`[${new Date().toISOString()}] ${message}`);
+};
+
+app.use(cors({
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:5173',
+    'https://your-netlify-app.netlify.app' // Replace with your Netlify domain
+  ],
+  credentials: true
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
