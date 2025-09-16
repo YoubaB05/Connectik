@@ -2,7 +2,8 @@ import {
   type User, type InsertUser, type ContactSubmission, type InsertContactSubmission,
   type Product, type InsertProduct, type Category, type InsertCategory,
   type Order, type InsertOrder, type OrderItem,
-  users, contactSubmissions, products, categories, orders, orderItems
+  type AdminUser, type InsertAdminUser,
+  users, contactSubmissions, products, categories, orders, orderItems, adminUsers
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
@@ -14,21 +15,32 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   
+  // Admin methods
+  getAdminByEmail(email: string): Promise<AdminUser | undefined>;
+  createAdminUser(admin: InsertAdminUser): Promise<AdminUser>;
+  
   // Contact methods
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
   getContactSubmissions(): Promise<ContactSubmission[]>;
+  deleteContactSubmission(id: string): Promise<boolean>;
   
   // Product methods
   getProducts(): Promise<Product[]>;
+  getAllProducts(): Promise<Product[]>; // Admin-only: includes inactive products
   getProductsByCategory(categoryId: string): Promise<Product[]>;
   getProductBySlug(slug: string): Promise<Product | undefined>;
+  getProductById(id: string): Promise<Product | undefined>;
   createProduct(product: InsertProduct): Promise<Product>;
   updateProduct(id: string, product: Partial<InsertProduct>): Promise<Product | undefined>;
+  deleteProduct(id: string): Promise<boolean>;
   
   // Category methods
   getCategories(): Promise<Category[]>;
   getCategoryBySlug(slug: string): Promise<Category | undefined>;
+  getCategoryById(id: string): Promise<Category | undefined>;
   createCategory(category: InsertCategory): Promise<Category>;
+  updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category | undefined>;
+  deleteCategory(id: string): Promise<boolean>;
   
   // Order methods
   createOrder(order: InsertOrder): Promise<Order>;
@@ -54,6 +66,17 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
+  // Admin methods
+  async getAdminByEmail(email: string): Promise<AdminUser | undefined> {
+    const [admin] = await db.select().from(adminUsers).where(eq(adminUsers.email, email));
+    return admin || undefined;
+  }
+
+  async createAdminUser(insertAdmin: InsertAdminUser): Promise<AdminUser> {
+    const [admin] = await db.insert(adminUsers).values(insertAdmin).returning();
+    return admin;
+  }
+
   // Contact methods
   async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
     const [contactSubmission] = await db
@@ -74,12 +97,24 @@ export class DatabaseStorage implements IStorage {
       .orderBy(desc(contactSubmissions.createdAt));
   }
 
+  async deleteContactSubmission(id: string): Promise<boolean> {
+    const result = await db.delete(contactSubmissions).where(eq(contactSubmissions.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
   // Product methods
   async getProducts(): Promise<Product[]> {
     return await db
       .select()
       .from(products)
       .where(eq(products.active, true))
+      .orderBy(desc(products.featured), desc(products.createdAt));
+  }
+
+  async getAllProducts(): Promise<Product[]> {
+    return await db
+      .select()
+      .from(products)
       .orderBy(desc(products.featured), desc(products.createdAt));
   }
 
@@ -99,6 +134,11 @@ export class DatabaseStorage implements IStorage {
     return product || undefined;
   }
 
+  async getProductById(id: string): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product || undefined;
+  }
+
   async createProduct(product: InsertProduct): Promise<Product> {
     const [newProduct] = await db.insert(products).values(product).returning();
     return newProduct;
@@ -113,6 +153,11 @@ export class DatabaseStorage implements IStorage {
     return updatedProduct || undefined;
   }
 
+  async deleteProduct(id: string): Promise<boolean> {
+    const result = await db.delete(products).where(eq(products.id, id));
+    return (result.rowCount || 0) > 0;
+  }
+
   // Category methods
   async getCategories(): Promise<Category[]> {
     return await db.select().from(categories).orderBy(categories.name);
@@ -123,9 +168,28 @@ export class DatabaseStorage implements IStorage {
     return category || undefined;
   }
 
+  async getCategoryById(id: string): Promise<Category | undefined> {
+    const [category] = await db.select().from(categories).where(eq(categories.id, id));
+    return category || undefined;
+  }
+
   async createCategory(category: InsertCategory): Promise<Category> {
     const [newCategory] = await db.insert(categories).values(category).returning();
     return newCategory;
+  }
+
+  async updateCategory(id: string, category: Partial<InsertCategory>): Promise<Category | undefined> {
+    const [updatedCategory] = await db
+      .update(categories)
+      .set(category)
+      .where(eq(categories.id, id))
+      .returning();
+    return updatedCategory || undefined;
+  }
+
+  async deleteCategory(id: string): Promise<boolean> {
+    const result = await db.delete(categories).where(eq(categories.id, id));
+    return (result.rowCount || 0) > 0;
   }
 
   // Order methods
