@@ -6,6 +6,7 @@ import {
   adminLoginSchema, type AdminUser 
 } from "@shared/schema";
 import { z } from "zod";
+import { ObjectStorageService } from "./objectStorage";
 
 // Extend Express Session interface to include admin
 declare module 'express-session' {
@@ -300,6 +301,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(category);
     } catch (error: any) {
       res.status(400).json({ message: "Error creating category: " + error.message });
+    }
+  });
+
+  // Image upload endpoints
+  app.post("/api/admin/images/upload", requireAdmin, async (req, res) => {
+    try {
+      const objectStorageService = new ObjectStorageService();
+      const uploadURL = await objectStorageService.getObjectEntityUploadURL();
+      res.json({ uploadURL });
+    } catch (error: any) {
+      console.error("Error getting upload URL:", error);
+      res.status(500).json({ error: "Error getting upload URL" });
+    }
+  });
+
+  app.put("/api/admin/images", requireAdmin, async (req, res) => {
+    try {
+      const { imageURL } = req.body;
+      if (!imageURL) {
+        return res.status(400).json({ error: "imageURL is required" });
+      }
+
+      const objectStorageService = new ObjectStorageService();
+      const objectPath = await objectStorageService.trySetObjectEntityAclPolicy(
+        imageURL,
+        {
+          owner: "admin",
+          visibility: "public",
+        }
+      );
+
+      res.json({ objectPath });
+    } catch (error: any) {
+      console.error("Error setting image ACL:", error);
+      res.status(500).json({ error: "Error setting image ACL" });
     }
   });
 

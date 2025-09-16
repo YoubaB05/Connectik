@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
+import { ImageUploader } from "@/components/ImageUploader";
 
 type ContactSubmission = {
   id: string;
@@ -852,6 +853,25 @@ export default function AdminDashboard() {
                               placeholder="Spécifications techniques du produit" 
                               rows={3}
                               data-testid="textarea-product-specifications"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={productForm.control}
+                      name="images"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Images du produit</FormLabel>
+                          <FormControl>
+                            <ImageUploader
+                              images={field.value || []}
+                              onChange={field.onChange}
+                              maxImages={5}
+                              data-testid="image-uploader-product"
                             />
                           </FormControl>
                           <FormMessage />
