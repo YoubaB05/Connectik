@@ -11,6 +11,8 @@ import Services from "./pages/services";
 import Boutique from "./pages/boutique";
 import About from "./pages/about";
 import Contact from "./pages/contact";
+import AdminLogin from "./pages/admin-login";
+import AdminDashboard from "./pages/admin-dashboard";
 
 function Router() {
   const [location] = useLocation();
@@ -27,6 +29,8 @@ function Router() {
       <Route path="/boutique" component={Boutique} />
       <Route path="/about" component={About} />
       <Route path="/contact" component={Contact} />
+      <Route path="/login" component={AdminLogin} />
+      <Route path="/admin" component={AdminDashboard} />
       <Route component={NotFound} />
     </Switch>
   );
