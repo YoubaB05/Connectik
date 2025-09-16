@@ -1,10 +1,207 @@
-import type { Express } from "express";
+import type { Express, Request, Response } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSubmissionSchema, insertProductSchema, insertCategorySchema } from "@shared/schema";
+import { 
+  insertContactSubmissionSchema, insertProductSchema, insertCategorySchema, 
+  adminLoginSchema, type AdminUser 
+} from "@shared/schema";
 import { z } from "zod";
 
+// Extend Express Session interface to include admin
+declare module 'express-session' {
+  interface SessionData {
+    admin?: {
+      email: string;
+      name: string;
+    };
+  }
+}
+
+// Admin authentication middleware  
+function requireAdmin(req: Request, res: Response, next: any) {
+  if (!req.session?.admin) {
+    return res.status(401).json({ message: "Non autorisé - connexion admin requise" });
+  }
+  next();
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Admin authentication routes
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const validatedData = adminLoginSchema.parse(req.body);
+      
+      // Check hardcoded admin credentials
+      if (validatedData.email === "admin@connectik.com" && validatedData.password === "connectik_admin") {
+        // Create admin session
+        req.session.admin = {
+          email: validatedData.email,
+          name: "Administrateur"
+        };
+        
+        res.json({
+          message: "Connexion réussie",
+          admin: { email: validatedData.email, name: "Administrateur" }
+        });
+      } else {
+        res.status(401).json({ message: "Email ou mot de passe incorrect" });
+      }
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ 
+          message: "Données invalides",
+          errors: error.errors 
+        });
+      } else {
+        res.status(500).json({ 
+          message: "Erreur interne du serveur" 
+        });
+      }
+    }
+  });
+
+  app.post("/api/admin/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        res.status(500).json({ message: "Erreur lors de la déconnexion" });
+      } else {
+        res.json({ message: "Déconnexion réussie" });
+      }
+    });
+  });
+
+  app.get("/api/admin/me", requireAdmin, (req, res) => {
+    res.json({ admin: req.session.admin });
+  });
+
+  // Admin management routes
+  
+  // Admin contact submissions management
+  app.get("/api/admin/contact-submissions", requireAdmin, async (req, res) => {
+    try {
+      const submissions = await storage.getContactSubmissions();
+      res.json(submissions);
+    } catch (error) {
+      res.status(500).json({ message: "Erreur lors de la récupération des demandes" });
+    }
+  });
+
+  app.delete("/api/admin/contact-submissions/:id", requireAdmin, async (req, res) => {
+    try {
+      const success = await storage.deleteContactSubmission(req.params.id);
+      if (success) {
+        res.json({ message: "Demande supprimée avec succès" });
+      } else {
+        res.status(404).json({ message: "Demande non trouvée" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Erreur lors de la suppression" });
+    }
+  });
+
+  // Admin products management  
+  app.get("/api/admin/products", requireAdmin, async (req, res) => {
+    try {
+      const products = await storage.getAllProducts(); // includes inactive products
+      res.json(products);
+    } catch (error: any) {
+      res.status(500).json({ message: "Erreur lors de la récupération des produits" });
+    }
+  });
+
+  app.post("/api/admin/products", requireAdmin, async (req, res) => {
+    try {
+      const validatedProduct = insertProductSchema.parse(req.body);
+      const product = await storage.createProduct(validatedProduct);
+      res.status(201).json(product);
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ message: "Données invalides", errors: error.errors });
+      } else {
+        res.status(500).json({ message: "Erreur lors de la création du produit" });
+      }
+    }
+  });
+
+  app.put("/api/admin/products/:id", requireAdmin, async (req, res) => {
+    try {
+      const validatedProduct = insertProductSchema.partial().parse(req.body);
+      const product = await storage.updateProduct(req.params.id, validatedProduct);
+      if (product) {
+        res.json(product);
+      } else {
+        res.status(404).json({ message: "Produit non trouvé" });
+      }
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ message: "Données invalides", errors: error.errors });
+      } else {
+        res.status(500).json({ message: "Erreur lors de la modification du produit" });
+      }
+    }
+  });
+
+  app.delete("/api/admin/products/:id", requireAdmin, async (req, res) => {
+    try {
+      const success = await storage.deleteProduct(req.params.id);
+      if (success) {
+        res.json({ message: "Produit supprimé avec succès" });
+      } else {
+        res.status(404).json({ message: "Produit non trouvé" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Erreur lors de la suppression du produit" });
+    }
+  });
+
+  // Admin categories management
+  app.post("/api/admin/categories", requireAdmin, async (req, res) => {
+    try {
+      const validatedCategory = insertCategorySchema.parse(req.body);
+      const category = await storage.createCategory(validatedCategory);
+      res.status(201).json(category);
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ message: "Données invalides", errors: error.errors });
+      } else {
+        res.status(500).json({ message: "Erreur lors de la création de la catégorie" });
+      }
+    }
+  });
+
+  app.put("/api/admin/categories/:id", requireAdmin, async (req, res) => {
+    try {
+      const validatedCategory = insertCategorySchema.partial().parse(req.body);
+      const category = await storage.updateCategory(req.params.id, validatedCategory);
+      if (category) {
+        res.json(category);
+      } else {
+        res.status(404).json({ message: "Catégorie non trouvée" });
+      }
+    } catch (error: any) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ message: "Données invalides", errors: error.errors });
+      } else {
+        res.status(500).json({ message: "Erreur lors de la modification de la catégorie" });
+      }
+    }
+  });
+
+  app.delete("/api/admin/categories/:id", requireAdmin, async (req, res) => {
+    try {
+      const success = await storage.deleteCategory(req.params.id);
+      if (success) {
+        res.json({ message: "Catégorie supprimée avec succès" });
+      } else {
+        res.status(404).json({ message: "Catégorie non trouvée" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Erreur lors de la suppression de la catégorie" });
+    }
+  });
+
+  // Public routes
+
   // Contact form submission
   app.post("/api/contact", async (req, res) => {
     try {
