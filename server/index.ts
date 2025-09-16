@@ -3,7 +3,8 @@ import cors from "cors";
 import session from "express-session";
 import MemoryStore from "memorystore";
 import { registerRoutes } from "./routes";
-import { setupVite, serveStatic, log } from "./vite";
+import { setupVite } from "./vite";
+import { serveStatic } from "./storage";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -78,14 +79,12 @@ app.use((req, res, next) => {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
+  const host = process.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost';
+  
   server.listen({
-    port: Number(process.env.PORT || 3000),
-    host: '0.0.0.0', // Changed from 'localhost' to '0.0.0.0'
+    port: Number(PORT),
+    host: host,
   }, () => {
-    log(`serving on http://localhost:${PORT}`);
+    console.log(`Server running on http://${host}:${PORT}`);
   });
 })();
