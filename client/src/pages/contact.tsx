@@ -8,7 +8,7 @@ import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import { FloatingInput, FloatingTextarea, FloatingSelect } from "@/components/ui/floating-input";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, MapPin, Clock } from "lucide-react";
+import { Mail, Phone, MapPin, Clock, MessageCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -58,21 +58,21 @@ export default function Contact() {
     {
       icon: Mail,
       title: "Email",
-      value: "contact@excellence-digitale.fr",
+      value: "mesbih_mehdi@hotmail.com",
       subtitle: "Réponse sous 24h",
       color: "primary"
     },
     {
       icon: Phone,
       title: "Téléphone",
-      value: "+33 1 23 45 67 89",
+      value: "+32 492 53 91 63",
       subtitle: "Lun-Ven, 9h-18h",
       color: "accent"
     },
     {
       icon: MapPin,
       title: "Localisation",
-      value: "Paris & Région Parisienne",
+      value: "Bruxelles",
       subtitle: "Interventions à distance",
       color: "secondary"
     }
@@ -280,22 +280,29 @@ export default function Contact() {
               
               <div className="bg-card p-6 rounded-lg border border-border">
                 <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center mr-4">
-                    <Clock className="w-6 h-6 text-accent" />
+                  <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mr-4">
+                    <MessageCircle className="w-6 h-6 text-green-600" />
                   </div>
-                  <h4 className="text-lg font-sans font-semibold text-foreground" data-testid="consultation-title">
-                    Consultation Gratuite
+                  <h4 className="text-lg font-sans font-semibold text-foreground" data-testid="whatsapp-title">
+                    Discuter sur WhatsApp
                   </h4>
                 </div>
-                <p className="text-muted-foreground mb-4" data-testid="consultation-description">
-                  Bénéficiez d'un premier échange de 30 minutes pour définir ensemble la stratégie idéale pour votre projet.
+                <p className="text-muted-foreground mb-4" data-testid="whatsapp-description">
+                  Contactez-nous directement sur WhatsApp pour un échange rapide et personnalisé.
                 </p>
-                <Button 
-                  className="bg-accent text-accent-foreground px-6 py-3 rounded-lg font-sans font-medium hover:bg-accent/90 transition-colors duration-200"
-                  data-testid="button-book-consultation"
+                <a 
+                  href="https://wa.me/32492539163"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
-                  Réserver ma Consultation
-                </Button>
+                  <Button 
+                    className="bg-green-600 text-white px-6 py-3 rounded-lg font-sans font-medium hover:bg-green-700 transition-colors duration-200 w-full"
+                    data-testid="button-whatsapp"
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2" />
+                    Discuter sur WhatsApp
+                  </Button>
+                </a>
               </div>
               
               {/* Office Image */}

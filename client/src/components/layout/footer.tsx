@@ -1,5 +1,4 @@
 import { Link } from "wouter";
-import { Twitter, Linkedin, Instagram } from "lucide-react";
 import Logo from "@/components/ui/logo";
 
 export default function Footer() {
@@ -14,29 +13,6 @@ export default function Footer() {
             <p className="text-white/80 mb-6 leading-relaxed" data-testid="footer-description">
               Votre partenaire de confiance pour une transformation digitale réussie. Nous combinons expertise technique, stratégie commerciale et innovation pour propulser votre entreprise vers l'excellence.
             </p>
-            <div className="flex space-x-4">
-              <a 
-                href="#" 
-                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
-                data-testid="social-twitter"
-              >
-                <Twitter className="w-5 h-5" />
-              </a>
-              <a 
-                href="#" 
-                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
-                data-testid="social-linkedin"
-              >
-                <Linkedin className="w-5 h-5" />
-              </a>
-              <a 
-                href="#" 
-                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors duration-200"
-                data-testid="social-instagram"
-              >
-                <Instagram className="w-5 h-5" />
-              </a>
-            </div>
           </div>
           
           <div>
@@ -59,15 +35,10 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-white/20 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-white/60 text-sm mb-4 md:mb-0" data-testid="footer-copyright">
+        <div className="border-t border-white/20 pt-8">
+          <p className="text-white/60 text-sm text-center" data-testid="footer-copyright">
             © 2025 Connectik. Tous droits réservés.
           </p>
-          <div className="flex space-x-6 text-sm">
-            <a href="#" className="text-white/60 hover:text-white transition-colors duration-200" data-testid="footer-legal">Mentions Légales</a>
-            <a href="#" className="text-white/60 hover:text-white transition-colors duration-200" data-testid="footer-privacy">Politique de Confidentialité</a>
-            <a href="#" className="text-white/60 hover:text-white transition-colors duration-200" data-testid="footer-terms">CGV</a>
-          </div>
         </div>
       </div>
     </footer>
