@@ -19,9 +19,9 @@ app.use(cors({
   origin: [
     'http://localhost:3000',
     'http://localhost:5173',
-    'https://your-netlify-app.netlify.app' // Replace with your Netlify domain
+    'https://connectik1.netlify.app', // Your Netlify domain
   ],
-  credentials: true
+  credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

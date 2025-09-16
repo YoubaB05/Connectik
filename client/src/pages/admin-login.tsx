@@ -62,6 +62,19 @@ export default function AdminLogin() {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { email, password } = form.getValues();
+    try {
+      await loginMutation.mutateAsync({ email, password });
+      // Redirect on success
+      setLocation('/admin');
+    } catch (error) {
+      console.error('Login failed:', error);
+      // Show error message to user
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4">
       <Card className="w-full max-w-md">
@@ -76,7 +89,7 @@ export default function AdminLogin() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"

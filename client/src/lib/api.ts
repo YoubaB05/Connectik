@@ -1,26 +1,23 @@
-export const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
-export const api = {
-  get: async (endpoint: string) => {
-    const response = await fetch(`${API_URL}${endpoint}`, {
-      credentials: 'include'
-    });
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.json();
-  },
-  
-  post: async (endpoint: string, data?: any) => {
-    const response = await fetch(`${API_URL}${endpoint}`, {
+export async function loginAdmin(email: string, password: string) {
+  try {
+    const response = await fetch(`${API_URL}/api/admin/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: data ? JSON.stringify(data) : undefined,
+      body: JSON.stringify({ email, password }),
     });
-    if (!response.ok) throw new Error('Network response was not ok');
-    return response.json();
-  },
-  
-  // Add other methods as needed
-};
+
+    if (!response.ok) {
+      throw new Error('Login failed');
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Login error:', error);
+    throw error;
+  }
+}
