@@ -10,6 +10,15 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
 });
 
+// Admin users table for backend authentication
+export const adminUsers = pgTable("admin_users", {
+  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
+  email: text("email").notNull().unique(),
+  password: text("password").notNull(),
+  name: text("name").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const contactSubmissions = pgTable("contact_submissions", {
   id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
   firstName: text("first_name").notNull(),
@@ -24,6 +33,17 @@ export const contactSubmissions = pgTable("contact_submissions", {
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
+});
+
+export const insertAdminUserSchema = createInsertSchema(adminUsers).pick({
+  email: true,
+  password: true,
+  name: true,
+});
+
+export const adminLoginSchema = z.object({
+  email: z.string().email("Adresse email invalide"),
+  password: z.string().min(1, "Le mot de passe est requis"),
 });
 
 export const insertContactSubmissionSchema = createInsertSchema(contactSubmissions).pick({
@@ -177,6 +197,9 @@ export const insertOrderSchema = createInsertSchema(orders).pick({
 // Type exports
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
+export type AdminUser = typeof adminUsers.$inferSelect;
+export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
+export type AdminLogin = z.infer<typeof adminLoginSchema>;
 export type ContactSubmission = typeof contactSubmissions.$inferSelect;
 export type InsertContactSubmission = z.infer<typeof insertContactSubmissionSchema>;
 
