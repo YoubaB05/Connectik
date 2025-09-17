@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { 
   insertContactSubmissionSchema, insertProductSchema, insertCategorySchema, 
   adminLoginSchema, type AdminUser 
-} from "@shared/schema";
+} from "../shared/schema";
 import { z } from "zod";
 import { ObjectStorageService } from "./objectStorage";
 

@@ -2,8 +2,8 @@
   "compilerOptions": {
     "outDir": "dist/server",
     "noEmit": false,
-    "module": "ESNext",
-    "target": "ESNext",
+    "module": "CommonJS",
+    "target": "ES2020",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
@@ -13,7 +13,9 @@
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["./shared/*"]
-    }
+    },
+    "rootDir": ".",
+    "moduleDetection": "force"
   },
   "include": ["server/**/*", "shared/**/*"],
   "exclude": ["node_modules", "dist", "client", "vite.config.ts", "server/vite.ts", "server/serveStatic.ts", "**/*.test.ts", "**/*.spec.ts"]

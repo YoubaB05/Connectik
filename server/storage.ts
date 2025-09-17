@@ -4,7 +4,7 @@ import {
   type Order, type InsertOrder, type OrderItem,
   type AdminUser, type InsertAdminUser,
   users, contactSubmissions, products, categories, orders, orderItems, adminUsers
-} from "@shared/schema";
+} from "../shared/schema";
 import { db } from "./db";
 import { eq, desc, and } from "drizzle-orm";
 import { randomUUID } from "crypto";

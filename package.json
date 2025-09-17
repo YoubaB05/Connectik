@@ -9,7 +9,7 @@
     "build:client": "vite build",
     "build:server": "tsc -p tsconfig.server.json",
     "build:netlify": "npm run build:client",
-    "start": "cross-env NODE_ENV=production node dist/server/index.js"
+    "start": "cross-env NODE_ENV=production node dist/server/server/index.js"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.17.1",
