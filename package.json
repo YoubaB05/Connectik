@@ -5,8 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsx server/index.ts",
-    "build": "tsc -p tsconfig.server.json",
-    "start": "cross-env NODE_ENV=production node dist/server/index.js"
+    "build": "vite build",
+    "build:client": "vite build",
+    "start": "cross-env NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.17.1",
@@ -105,7 +106,7 @@
     "tailwindcss-animate": "^1.0.7",
     "tsx": "^4.19.1",
     "typescript": "5.6.3",
-    "vite": "^5.4.19"
+    "vite": "^5.4.20"
   },
   "optionalDependencies": {
     "bufferutil": "^4.0.8"
