@@ -2,7 +2,33 @@
   command = "npm run build:client"
   publish = "dist/public"
 
+# Environment variables for build
+[build.environment]
+  NODE_VERSION = "18"
+
+# Redirect all API calls to your backend server
+[[redirects]]
+  from = "/api/*"
+  to = "https://connectik-z676.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# SPA fallback for client-side routing
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

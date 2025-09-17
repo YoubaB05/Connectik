@@ -10,10 +10,27 @@ const MemoryStoreSession = MemoryStore(session);
 
 // Remove static file serving since it's not needed for API-only server
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    'https://connectik1.netlify.app'
-  ],
+  origin: (origin, callback) => {
+    // Allow non-browser requests (e.g., curl, server-to-server)
+    if (!origin) return callback(null, true);
+
+    const allowedOrigins = new Set([
+      'http://localhost:5173',
+      'https://connectik1.netlify.app'
+    ]);
+
+    try {
+      const hostname = new URL(origin).hostname;
+      const isNetlifyPreview = /\.netlify\.app$/.test(hostname);
+      if (allowedOrigins.has(origin) || isNetlifyPreview) {
+        return callback(null, true);
+      }
+    } catch (_) {
+      // If parsing fails, fall through to block
+    }
+
+    callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 

@@ -7,6 +7,7 @@
     "dev": "cross-env NODE_ENV=development tsx server/index.ts",
     "build": "vite build",
     "build:client": "vite build",
+    "build:netlify": "npm run build:client",
     "start": "cross-env NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
