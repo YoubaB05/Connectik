@@ -7,8 +7,9 @@
     "dev": "cross-env NODE_ENV=development tsx server/index.ts",
     "build": "vite build",
     "build:client": "vite build",
+    "build:server": "tsc -p tsconfig.server.json",
     "build:netlify": "npm run build:client",
-    "start": "cross-env NODE_ENV=production node dist/index.js"
+    "start": "cross-env NODE_ENV=production node dist/server/index.js"
   },
   "dependencies": {
     "@google-cloud/storage": "^7.17.1",
