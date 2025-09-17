@@ -3,7 +3,7 @@ services:
     name: connectik-api
     env: node
     nodeVersion: 18
-    buildCommand: npm install --omit=dev=false && npm run build:server
+    buildCommand: npm install --include=dev && npm run build:server
     startCommand: npm start
     envVars:
       - key: NODE_ENV
