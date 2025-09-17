@@ -1,12 +1,15 @@
 import express from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-export const serveStatic = (app: express.Application) => {
-  // Serve static files from the dist/public directory
-  app.use(express.static(path.join(process.cwd(), 'dist', 'public')));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-  // Handle client-side routing by serving index.html for all routes
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(process.cwd(), 'dist', 'public', 'index.html'));
+export function serveStatic(app: express.Application) {
+  const publicPath = path.join(__dirname, '../public');
+  
+  app.use(express.static(publicPath));
+  
+  app.get('*', (_req, res) => {
+    res.sendFile(path.join(publicPath, 'index.html'));
   });
-};
+}

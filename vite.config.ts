@@ -26,10 +26,4 @@ export default defineConfig({
       },
     },
   },
-  server: {
-    fs: {
-      strict: true,
-      deny: ["**/.*"],
-    },
-  },
 });
