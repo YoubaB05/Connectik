@@ -34,10 +34,14 @@ export default function AdminLogin() {
 
   const loginMutation = useMutation({
     mutationFn: async (data: LoginForm) => {
+      console.log('Attempting login with:', data);
       const response = await apiRequest("POST", "/api/admin/login", data);
-      return response.json();
+      const result = await response.json();
+      console.log('Login response:', result);
+      return result;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log('Login successful, redirecting to admin dashboard');
       toast({
         title: "Connexion réussie",
         description: "Redirection vers le tableau de bord...",
@@ -45,6 +49,7 @@ export default function AdminLogin() {
       setLocation("/admin");
     },
     onError: (error: any) => {
+      console.error('Login error:', error);
       toast({
         title: "Erreur de connexion",
         description: error.message || "Email ou mot de passe incorrect",
@@ -62,19 +67,6 @@ export default function AdminLogin() {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const { email, password } = form.getValues();
-    try {
-      await loginMutation.mutateAsync({ email, password });
-      // Redirect on success
-      setLocation('/admin');
-    } catch (error) {
-      console.error('Login failed:', error);
-      // Show error message to user
-    }
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 px-4">
       <Card className="w-full max-w-md">
@@ -89,7 +81,7 @@ export default function AdminLogin() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"

@@ -40,6 +40,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           name: "Administrateur"
         };
         
+        console.log('Admin session created:', req.session.admin);
+        console.log('Session ID:', req.sessionID);
+        
         res.json({
           message: "Connexion réussie",
           admin: { email: validatedData.email, name: "Administrateur" }
@@ -72,6 +75,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/admin/me", requireAdmin, (req, res) => {
+    console.log('Admin me check - Session ID:', req.sessionID);
+    console.log('Admin me check - Session admin:', req.session.admin);
     res.json({ admin: req.session.admin });
   });
 
