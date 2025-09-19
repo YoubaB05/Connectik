@@ -82,8 +82,11 @@ export default function AdminDashboard() {
   // Check localStorage on mount
   useEffect(() => {
     const storedAdminData = localStorage.getItem('adminData');
+    console.log('Checking localStorage on mount:', storedAdminData);
     if (storedAdminData) {
-      setLocalAdminData(JSON.parse(storedAdminData));
+      const parsedData = JSON.parse(storedAdminData);
+      console.log('Setting local admin data:', parsedData);
+      setLocalAdminData(parsedData);
     }
   }, []);
 
@@ -91,6 +94,7 @@ export default function AdminDashboard() {
   const { data: adminData, isLoading: isCheckingAuth, error: authError } = useQuery<{admin: {email: string, name: string}}>({
     queryKey: ["/api/admin/me"],
     retry: false,
+    enabled: !localAdminData, // Don't run query if we have localStorage data
   });
 
   useEffect(() => {
@@ -310,7 +314,10 @@ export default function AdminDashboard() {
     setProductDialogOpen(true);
   };
 
-  if (isCheckingAuth || !adminData) {
+  console.log('Admin dashboard state:', { isCheckingAuth, adminData, localAdminData, currentAdminData });
+  
+  if ((isCheckingAuth || !adminData) && !localAdminData) {
+    console.log('Showing loading screen');
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
