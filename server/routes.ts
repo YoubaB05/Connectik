@@ -45,7 +45,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         res.json({
           message: "Connexion réussie",
-          admin: { email: validatedData.email, name: "Administrateur" }
+          admin: { email: validatedData.email, name: "Administrateur" },
+          sessionId: req.sessionID
         });
       } else {
         res.status(401).json({ message: "Email ou mot de passe incorrect" });

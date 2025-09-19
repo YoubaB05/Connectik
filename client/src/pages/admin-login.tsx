@@ -42,6 +42,9 @@ export default function AdminLogin() {
     },
     onSuccess: (data) => {
       console.log('Login successful, redirecting to admin dashboard');
+      // Store admin data in localStorage as fallback
+      localStorage.setItem('adminData', JSON.stringify(data.admin));
+      localStorage.setItem('sessionId', data.sessionId);
       toast({
         title: "Connexion réussie",
         description: "Redirection vers le tableau de bord...",

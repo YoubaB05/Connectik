@@ -77,18 +77,38 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState("dashboard");
   const [productDialogOpen, setProductDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [localAdminData, setLocalAdminData] = useState<{email: string, name: string} | null>(null);
+
+  // Check localStorage on mount
+  useEffect(() => {
+    const storedAdminData = localStorage.getItem('adminData');
+    if (storedAdminData) {
+      setLocalAdminData(JSON.parse(storedAdminData));
+    }
+  }, []);
 
   // Check if user is authenticated
-  const { data: adminData, isLoading: isCheckingAuth } = useQuery<{admin: {email: string, name: string}}>({
+  const { data: adminData, isLoading: isCheckingAuth, error: authError } = useQuery<{admin: {email: string, name: string}}>({
     queryKey: ["/api/admin/me"],
     retry: false,
   });
 
   useEffect(() => {
     if (!isCheckingAuth && !adminData) {
+      // Check localStorage as fallback
+      const storedAdminData = localStorage.getItem('adminData');
+      if (storedAdminData) {
+        console.log('Using stored admin data from localStorage');
+        setLocalAdminData(JSON.parse(storedAdminData));
+        return;
+      }
+      console.log('No admin data found, redirecting to login');
       setLocation("/login");
     }
   }, [adminData, isCheckingAuth, setLocation]);
+
+  // Use either API data or local data
+  const currentAdminData = adminData || (localAdminData ? { admin: localAdminData } : null);
 
   // Logout mutation
   const logoutMutation = useMutation({
@@ -97,6 +117,9 @@ export default function AdminDashboard() {
       return response.json();
     },
     onSuccess: () => {
+      // Clear localStorage
+      localStorage.removeItem('adminData');
+      localStorage.removeItem('sessionId');
       queryClient.clear();
       setLocation("/login");
       toast({
@@ -311,7 +334,7 @@ export default function AdminDashboard() {
                   Panneau d'Administration
                 </h1>
                 <p className="text-sm text-gray-500">
-                  Connecté en tant que {adminData.admin?.name}
+                  Connecté en tant que {currentAdminData?.admin?.name}
                 </p>
               </div>
             </div>
