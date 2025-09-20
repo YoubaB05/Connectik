@@ -40,13 +40,14 @@ export default function Hero() {
               Nous transformons votre vision en succès concret grâce à notre expertise en développement digital, intelligence artificielle et stratégies de croissance sur mesure.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                onClick={scrollToSolutions}
-                className="bg-accent text-accent-foreground px-8 py-4 rounded-lg font-sans font-semibold text-lg hover:bg-accent/90 transition-all duration-200 hover:scale-105"
-                data-testid="button-discover-solutions"
-              >
-                Découvrir nos Solutions
-              </Button>
+              <Link href="/offres">
+                <Button
+                  className="bg-accent text-accent-foreground px-8 py-4 rounded-lg font-sans font-semibold text-lg hover:bg-accent/90 transition-all duration-200 hover:scale-105"
+                  data-testid="button-discover-offers"
+                >
+                  Consulter nos Offres
+                </Button>
+              </Link>
               <Link href="/contact">
                 <Button
                   variant="outline"

@@ -270,13 +270,13 @@ export default function About() {
               Découvrez comment notre approche unique peut transformer votre vision en succès concret.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link href="/services">
+              <Link href="/offres">
                 <Button
                   variant="outline"
                   className="px-8 py-4 rounded-lg font-sans font-semibold text-lg border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-200"
-                  data-testid="button-discover-services"
+                  data-testid="button-discover-offers"
                 >
-                  Découvrir nos Services
+                  Consulter nos Offres
                 </Button>
               </Link>
               <Link href="/contact">

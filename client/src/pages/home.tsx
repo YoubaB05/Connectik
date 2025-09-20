@@ -2,7 +2,6 @@ import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import Hero from "@/components/sections/hero";
 import ServicePillars from "@/components/sections/service-pillars";
-import Testimonials from "@/components/sections/testimonials";
 import { motion } from "framer-motion";
 import { CheckCircle, Heart, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -93,8 +92,6 @@ export default function Home() {
           </div>
         </div>
       </section>
-
-      <Testimonials />
       
       {/* CTA Section */}
       <section className="py-20 bg-muted">
